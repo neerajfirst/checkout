@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 // MySQL connection configuration
 const connection = mysql.createConnection({
-    host: 'dpirds.clmcwsesapgy.us-east-1.rds.amazonaws.com',
+    host: 'dpirds.cx8a8ak8wme1.us-east-1.rds.amazonaws.com',
     user: 'admin',
     password: 'scalable123',
     database: 'DPIDB'
@@ -15,6 +15,14 @@ const connection = mysql.createConnection({
 
 // Connect to MySQL
 connection.connect();
+
+// axios.get('http://localhost:3000/api/get/products')
+//   .then(response => {
+//     console.log(response.data);
+//   })
+//   .catch(error => {
+//     console.error(error);
+//   });
 
 // Define routes
 app.post('/billing/order/payments', (req, res) => {
@@ -24,6 +32,14 @@ app.post('/billing/order/payments', (req, res) => {
   connection.query('INSERT INTO billing SET ?', billing, (error, results, fields) => {
     if (error) throw error;
     res.json({ message: 'Payment processed successfully', paymentId: results.insertId });
+  });
+});
+
+app.get('/api/get/payments', (req, res) => {
+  // Fetch products from database
+  connection.query('SELECT * FROM billing', (error, results, fields) => {
+    if (error) throw error;
+    res.json(results);
   });
 });
 
